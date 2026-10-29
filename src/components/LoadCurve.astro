@@ -1,0 +1,141 @@
+---
+// Illustrative summer-day demand curve with the supply stack filled underneath.
+// Shapes are hand-tuned for explanation, not drawn from model output.
+
+const W = 1000;
+const H = 360;
+const pad = { top: 24, right: 150, bottom: 40, left: 8 };
+const iw = W - pad.left - pad.right;
+const ih = H - pad.top - pad.bottom;
+const maxGW = 42;
+
+const demand = (h: number) =>
+  27 + 4 * Math.exp(-((h - 8) ** 2) / 6) + 12.5 * Math.exp(-((h - 17.2) ** 2) / 10) - 2 * Math.exp(-((h - 4) ** 2) / 8);
+
+const NUCLEAR = 9;
+const GAS = 33;
+
+const x = (h: number) => pad.left + (h / 24) * iw;
+const y = (gw: number) => pad.top + ih - (gw / maxGW) * ih;
+
+const hours = Array.from({ length: 97 }, (_, i) => i / 4);
+const line = (f: (h: number) => number) => hours.map((h) => `${x(h).toFixed(1)},${y(f(h)).toFixed(1)}`);
+const band = (lo: (h: number) => number, hi: (h: number) => number) => {
+  const top = line(hi);
+  const bottom = line(lo).reverse();
+  return `M${top.join('L')}L${bottom.join('L')}Z`;
+};
+
+const nuclearTop = (h: number) => Math.min(demand(h), NUCLEAR);
+const gasTop = (h: number) => Math.min(demand(h), GAS);
+
+const paths = {
+  nuclear: band(() => 0, nuclearTop),
+  gas: band(nuclearTop, gasTop),
+  peaker: band(gasTop, demand),
+  demand: `M${line(demand).join('L')}`,
+};
+
+const ticks = [
+  { h: 0, label: 'Midnight' },
+  { h: 6, label: '6 am' },
+  { h: 12, label: 'Noon' },
+  { h: 18, label: '6 pm' },
+  { h: 24, label: 'Midnight' },
+];
+
+const peakH = 17.2;
+const labelX = W - pad.right + 14;
+---
+
+<figure class="curve">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="curve-title curve-desc">
+    <title id="curve-title">A summer day of electricity demand in metro Atlanta</title>
+    <desc id="curve-desc">
+      Demand is lowest before dawn, rises through the morning and peaks around 5 pm. Nuclear plants supply a steady
+      base all day, gas combined-cycle plants follow most of the rise, and expensive peaker plants run only during the
+      late-afternoon peak.
+    </desc>
+    <defs>
+      <clipPath id="reveal">
+        <rect class="curve__reveal" x="0" y="0" width={W - pad.right} height={H} />
+      </clipPath>
+    </defs>
+
+    {ticks.map((t) => (
+      <g>
+        <line x1={x(t.h)} x2={x(t.h)} y1={pad.top} y2={pad.top + ih} class="curve__grid" />
+        <text x={x(t.h)} y={H - 12} class="curve__tick" text-anchor={t.h === 0 ? 'start' : t.h === 24 ? 'end' : 'middle'}>
+          {t.label}
+        </text>
+      </g>
+    ))}
+
+    <g clip-path="url(#reveal)">
+      <path d={paths.nuclear} class="curve__band" style="fill: var(--fuel-nuclear)" />
+      <path d={paths.gas} class="curve__band" style="fill: var(--fuel-gas)" />
+      <path d={paths.peaker} class="curve__band" style="fill: var(--fuel-peaker)" />
+      <path d={paths.demand} class="curve__line" />
+      <circle cx={x(peakH)} cy={y(demand(peakH))} r="5" class="curve__dot" />
+    </g>
+
+    <g class="curve__labels">
+      <text x={labelX} y={y(37.5)}>
+        <tspan class="curve__key" style="fill: var(--fuel-peaker)">■</tspan> Peakers
+        <tspan x={labelX + 16} dy="1.2em" class="curve__sub">costly, run at peak</tspan>
+      </text>
+      <text x={labelX} y={y(20)}>
+        <tspan class="curve__key" style="fill: var(--fuel-gas)">■</tspan> Gas combined cycle
+        <tspan x={labelX + 16} dy="1.2em" class="curve__sub">follows the day</tspan>
+      </text>
+      <text x={labelX} y={y(NUCLEAR / 2)}>
+        <tspan class="curve__key" style="fill: var(--fuel-nuclear)">■</tspan> Nuclear
+        <tspan x={labelX + 16} dy="1.2em" class="curve__sub">cheap, steady base</tspan>
+      </text>
+    </g>
+
+    <text x={x(peakH) - 10} y={y(demand(peakH)) - 14} class="curve__callout" text-anchor="end">Evening peak</text>
+  </svg>
+  <figcaption>
+    An illustrative summer day. As demand climbs, the grid calls on more expensive plants. Shifting or shaving that
+    late-afternoon peak is one of the cheapest ways to lower costs for everyone.
+  </figcaption>
+</figure>
+
+<style>
+  .curve { margin: 0; }
+  .curve svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .curve__grid { stroke: var(--rule); stroke-width: 1; }
+  .curve__tick { font-family: var(--sans); font-size: 14px; fill: var(--ink-soft); }
+  .curve__band { opacity: 0.92; }
+  .curve__line { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+  .curve__dot { fill: var(--paper); stroke: var(--ink); stroke-width: 2.5; }
+  .curve__labels text { font-family: var(--sans); font-size: 15px; font-weight: 650; fill: var(--ink); }
+  .curve__sub { font-weight: 450; font-size: 13px; fill: var(--ink-soft); }
+  .curve__key { font-size: 15px; }
+  .curve__callout { font-family: var(--sans); font-size: 14px; font-weight: 650; fill: var(--ink); }
+  .curve figcaption {
+    font-family: var(--sans);
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin-top: 0.8rem;
+    line-height: 1.45;
+  }
+
+  /* One orchestrated moment: the day draws itself from midnight to midnight. */
+  .curve__reveal {
+    transform-box: fill-box;
+    transform-origin: left center;
+    animation: draw-day 2.6s cubic-bezier(0.45, 0.05, 0.25, 1) 0.2s both;
+  }
+  .curve__callout { animation: fade-in 0.5s ease 2.4s both; }
+  @keyframes draw-day { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+  @media (max-width: 640px) {
+    .curve__labels text { font-size: 22px; }
+    .curve__sub { font-size: 19px; }
+    .curve__tick, .curve__callout { font-size: 20px; }
+  }
+</style>

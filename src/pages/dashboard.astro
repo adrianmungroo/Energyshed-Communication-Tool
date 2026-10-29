@@ -1,0 +1,250 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../site';
+---
+
+<Base
+  title="Compare scenarios"
+  active="dashboard/"
+  app
+  description="Compare how energy scenarios change emissions, bills, peak demand, equity, reliability and jobs across the 11-county Atlanta region."
+>
+  <div class="dash" data-base={url('')}>
+    <header class="dash-head">
+      <div class="dash-head__text">
+        <p class="eyebrow" data-scenario-tag>Scenario</p>
+        <h1 data-scenario-title>Compare scenarios</h1>
+        <p class="lede" data-scenario-desc>Loading scenario data…</p>
+      </div>
+      <div class="dash-head__controls">
+        <label class="select">
+          <span class="sr-only">Scenario</span>
+          <select data-scenario></select>
+        </label>
+        <div class="pills">
+          <span class="pill pill--warn">Mock data</span>
+          <span class="pill">County level</span>
+          <span class="pill"><span data-horizon>2030</span></span>
+        </div>
+      </div>
+    </header>
+
+    <p class="mock-note" role="note">
+      Every number on this page is a placeholder to test the layout. Real results will come from the Integrated
+      Analysis Tool.
+    </p>
+
+    <div class="dash__grid">
+      <section class="card card--map" aria-labelledby="map-h">
+        <p class="card-label">Map</p>
+        <div class="map-head">
+          <div>
+            <h2 id="map-h" data-map-title>Loading…</h2>
+            <p class="map-sub" data-map-sub></p>
+          </div>
+          <button type="button" class="link-button" data-clear-county hidden>Show whole region</button>
+        </div>
+        <div class="map" data-map aria-describedby="map-help"></div>
+        <div class="legend" data-legend aria-hidden="true"></div>
+        <p id="map-help" class="hint">Select a county to see its numbers. Use Tab to move between counties.</p>
+      </section>
+
+      <section class="card card--outcomes" aria-labelledby="out-h">
+        <p class="card-label">Outcomes</p>
+        <h2 id="out-h" data-place>Atlanta region</h2>
+        <p class="hint">Select an outcome to map it.</p>
+        <div class="outcomes" data-outcomes role="group" aria-label="Outcomes"></div>
+      </section>
+
+      <section class="card card--compare" aria-labelledby="cmp-h">
+        <p class="card-label">All scenarios</p>
+        <h2 id="cmp-h" data-compare-title>Loading…</h2>
+        <div data-compare></div>
+      </section>
+    </div>
+
+    <noscript><p class="mock-note">The dashboard needs JavaScript to load its data.</p></noscript>
+  </div>
+</Base>
+
+<script>
+  import { mountDashboard } from '../scripts/dashboard';
+  const root = document.querySelector<HTMLElement>('.dash');
+  if (root) mountDashboard(root);
+</script>
+
+<style is:global>
+  .dash { --map-neutral: color-mix(in oklab, var(--paper-raised) 55%, var(--rule-strong)); }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+
+  /* ---- Header ---- */
+  .dash-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px 32px;
+    margin-bottom: 12px;
+  }
+  .dash-head__text { flex: 1 1 420px; min-width: 0; }
+  .dash-head h1 { font-size: clamp(1.7rem, 3vw, 2.2rem); margin-bottom: 0.35rem; }
+  .dash-head .lede { margin: 0; font-size: 0.98rem; }
+  .dash-head__controls { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  @media (max-width: 720px) { .dash-head__controls { align-items: stretch; width: 100%; } }
+
+  .select { position: relative; display: block; }
+  .select select {
+    appearance: none;
+    width: 100%;
+    min-width: 280px;
+    font: 500 0.92rem var(--sans);
+    color: var(--ink);
+    background: var(--paper-raised);
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    padding: 10px 40px 10px 14px;
+    cursor: pointer;
+  }
+  .select::after {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 1.5px solid var(--ink-soft);
+    border-bottom: 1.5px solid var(--ink-soft);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+  .pills { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  @media (max-width: 720px) { .pills { justify-content: flex-start; } }
+
+  .mock-note {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+  }
+
+  /* ---- Grid of cards ---- */
+  .dash__grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: 1fr;
+    grid-template-areas: 'map' 'outcomes' 'compare';
+  }
+  @media (min-width: 1100px) {
+    .dash__grid {
+      grid-template-columns: minmax(0, 1.25fr) minmax(360px, 1fr);
+      grid-template-areas: 'map outcomes' 'compare compare';
+      align-items: start;
+    }
+  }
+  .card--map { grid-area: map; }
+  .card--outcomes { grid-area: outcomes; }
+  .card--compare { grid-area: compare; }
+
+  .card {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 20px;
+    min-width: 0;
+  }
+  .card .card-label { margin-bottom: 0.5rem; }
+  .card h2 { font-size: 1.1rem; margin: 0 0 0.25rem; letter-spacing: -0.01em; }
+  .hint { color: var(--ink-soft); font-size: 0.84rem; margin: 0.3rem 0 0; line-height: 1.4; }
+
+  /* ---- Map ---- */
+  .map-head { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+  .map-sub { margin: 0; color: var(--ink-soft); font-size: 0.86rem; }
+  .map { max-width: 560px; margin-inline: auto; }
+  .map svg { width: 100%; height: auto; display: block; margin-top: 8px; }
+  .county { stroke: var(--paper-raised); stroke-width: 1.5; cursor: pointer; transition: opacity 0.15s; }
+  .county:hover { opacity: 0.85; }
+  .county:focus-visible { outline: none; stroke: var(--focus); stroke-width: 3; }
+  .county.is-selected { stroke: var(--ink); stroke-width: 3; }
+  .county-label {
+    font: 600 14px var(--sans);
+    fill: var(--ink);
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: var(--paper-raised);
+    stroke-width: 3px;
+  }
+  .link-button {
+    font: 600 0.86rem var(--sans); color: var(--accent); background: none; border: 0; padding: 4px 0; cursor: pointer;
+    text-decoration: underline; text-underline-offset: 0.18em; white-space: nowrap;
+  }
+  .legend { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--ink-soft); margin-top: 12px; flex-wrap: wrap; }
+  .legend__ramp { height: 8px; flex: 1 1 140px; max-width: 240px; border-radius: 999px; }
+
+  /* ---- Outcomes: one bordered grid split by hairlines ---- */
+  .outcomes {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  @media (min-width: 640px) and (max-width: 1099px) { .outcomes { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .tile {
+    text-align: left;
+    font: inherit;
+    color: var(--ink);
+    background: var(--paper-raised);
+    border: 0;
+    padding: 14px 14px 16px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    position: relative;
+  }
+  .tile:hover { background: var(--paper-sunken); }
+  .tile[aria-pressed='true'] { background: var(--accent-soft); }
+  .tile[aria-pressed='true']::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--accent);
+  }
+  .tile:focus-visible { outline-offset: -3px; }
+  .tile__label { font-size: 0.8rem; color: var(--ink-soft); line-height: 1.3; min-height: 2.6em; }
+  .tile__value { font-size: 1.6rem; font-weight: 750; letter-spacing: -0.02em; line-height: 1.1; }
+  .tile__unit { font-size: 0.75rem; color: var(--ink-soft); }
+  .tile__delta { margin-top: 6px; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
+  .tile__vs { color: var(--ink-soft); font-size: 0.75rem; }
+  .tile__delta--plain { color: var(--ink-soft); font-weight: 500; }
+
+  /* ---- Comparison bars ---- */
+  .bars { display: grid; gap: 12px; margin-top: 16px; }
+  .bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: 'name name' 'track value';
+    column-gap: 10px;
+    row-gap: 4px;
+    align-items: center;
+    font-size: 0.86rem;
+  }
+  @media (min-width: 640px) {
+    .bar { grid-template-columns: minmax(140px, 220px) minmax(0, 1fr) 9em; grid-template-areas: 'name track value'; }
+    .bar__name { text-align: right; }
+  }
+  .bar__name { grid-area: name; line-height: 1.25; color: var(--ink-soft); }
+  .bar__name.is-current { font-weight: 650; color: var(--ink); }
+  .bar__track { grid-area: track; position: relative; height: 24px; }
+  .bar__fill { position: absolute; inset: 0 auto 0 0; background: var(--rule-strong); border-radius: 3px; transition: width 0.35s ease; }
+  .bar__fill.is-bau { background: var(--ink); }
+  .bar__fill.is-current { background: var(--indigo); }
+  .bar__value { grid-area: value; font-weight: 600; white-space: nowrap; }
+</style>

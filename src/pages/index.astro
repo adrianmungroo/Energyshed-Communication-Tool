@@ -1,0 +1,152 @@
+---
+import Base from '../layouts/Base.astro';
+import Figure from '../components/Figure.astro';
+import LoadCurve from '../components/LoadCurve.astro';
+import NextChapter from '../components/NextChapter.astro';
+import { Image } from 'astro:assets';
+import { image } from '../images';
+import { url } from '../site';
+---
+
+<Base title="Atlanta Energyshed" active="">
+  <header class="page-head wrap">
+    <p class="eyebrow">Chapter 1 of 5</p>
+    <h1 class="hero__title">Where Atlanta's electricity comes from, and where it could go</h1>
+    <p class="lede">
+      Atlanta's <strong>energyshed</strong> is every source of electricity that powers the region's homes, businesses
+      and transit: rooftop solar, distant power plants, and the wires that tie them together across several states.
+    </p>
+  </header>
+
+  <section class="section wrap" aria-labelledby="curve-label">
+    <p class="card-label" id="curve-label">A summer day on the grid</p>
+    <LoadCurve />
+  </section>
+
+  <section class="section wrap">
+    <div class="split split--figure-wide">
+      <div class="prose">
+        <h2>Supply and demand</h2>
+        <p>
+          Like most dense urban areas, metro Atlanta is a consumption island. Its demand is met by a supply network
+          that stretches far beyond city limits, with power plants, transmission lines and fuel sources spread across
+          multiple states.
+        </p>
+        <p>
+          That's why the region's energy resilience, prices and environmental footprint only make sense in this
+          broader context.
+        </p>
+      </div>
+      <div class="pair">
+        <Figure src="supply_area.png" alt="Map of the balancing authority area that balances electricity supply and demand for the region" caption="The balancing authority that matches supply to demand" />
+        <Figure src="demand_area.png" alt="Map highlighting the high-demand metro Atlanta area" caption="The high-demand metro Atlanta area" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="split split--figure-wide split--reverse">
+      <div class="prose">
+        <h2>How power reaches you</h2>
+        <p>
+          Electricity flows from high-voltage generation and transmission lines through a spiderweb of distribution
+          lines to your outlet. Each step along the way loses a little more power.
+        </p>
+        <p>
+          Large customers take on more of that system themselves. Substation customers, such as Electric Membership
+          Corporations, and primary customers, such as large factories, maintain their own distribution equipment.
+          Homes and small buildings get end-to-end service, including upkeep and repairs, from the utility. That's
+          one reason different customers pay under different pricing models.
+        </p>
+      </div>
+      <Figure src="grid_structure.png" alt="Diagram of the power grid from generation and transmission through substations to primary and secondary customers" />
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="split split--text-wide">
+      <div class="prose">
+        <h2>How it's changing</h2>
+        <p>
+          The region is at a turning point. Population growth and new development are making energy needs more
+          complex, while new technology is changing both how much power we use and where it comes from.
+        </p>
+        <p>
+          Energy-hungry data centers are arriving fast. Grid equipment is ageing. Existing homes and offices need
+          retrofits to use energy well. Managing peak demand and electrifying buildings are both a challenge and an
+          opportunity for a more resilient system.
+        </p>
+      </div>
+      <Figure src="defining_atlanta_how_changing.png" alt="Illustration of the forces changing Atlanta's energy system" max={380} />
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="levers__title">Three levers this tool explores</h2>
+    <ul class="levers">
+      <li>
+        <a href={url('efficiency/')}>
+          <Image src={image('defining_energy_efficiency.png')} alt="" widths={[360, 560, 840]} sizes="(min-width: 1024px) 300px, 100vw" format="webp" quality={82} />
+          <h3>Energy efficiency</h3>
+        </a>
+        <p>
+          Heat pumps can cut heating and cooling energy by up to half. Better insulation, air sealing and windows stop
+          waste and make homes more comfortable.
+        </p>
+      </li>
+      <li>
+        <a href={url('local-generation/')}>
+          <Image src={image('defining_local_gen_storage.png')} alt="" widths={[360, 560, 840]} sizes="(min-width: 1024px) 300px, 100vw" format="webp" quality={82} />
+          <h3>Local generation and storage</h3>
+        </a>
+        <p>
+          Rooftop solar makes clean power on site. Batteries save it for the evening or an outage, and electric
+          vehicles with two-way charging can do the same.
+        </p>
+      </li>
+      <li>
+        <a href={url('grid/')}>
+          <Image src={image('defining_grid.png')} alt="" widths={[360, 560, 840]} sizes="(min-width: 1024px) 300px, 100vw" format="webp" quality={82} />
+          <h3>The grid itself</h3>
+        </a>
+        <p>
+          Instead of one-way delivery from big plants, the grid now has to handle power flowing both ways from solar,
+          batteries and vehicles, while data centers add new load.
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <NextChapter slug="" />
+</Base>
+
+<style>
+  .hero__title { max-width: 22ch; font-size: clamp(2.1rem, 4.4vw, 3.1rem); line-height: 1.08; letter-spacing: -0.03em; }
+
+  .pair { display: grid; gap: 20px; grid-template-columns: 1.4fr 1fr; align-items: start; }
+  @media (max-width: 560px) { .pair { grid-template-columns: 1fr; } }
+
+  .levers__title { margin-top: 0; }
+  .levers li { border: 1px solid var(--rule); border-radius: var(--radius-sm); padding: 14px; background: var(--paper-sunken); }
+  .levers {
+    list-style: none;
+    padding: 0;
+    margin: 1.2rem 0 0;
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .levers a { color: var(--ink); text-decoration: none; display: block; }
+  .levers img {
+    background: #fff;
+    border-radius: 6px;
+    border: 0;
+    aspect-ratio: 4 / 3;
+    object-fit: contain;
+    width: 100%;
+    padding: 10px;
+  }
+  .levers h3 { margin: 0.9rem 0 0.4rem; }
+  .levers a:hover h3 { color: var(--accent); text-decoration: underline; text-underline-offset: 0.18em; }
+  .levers p { color: var(--ink-soft); margin: 0; }
+</style>

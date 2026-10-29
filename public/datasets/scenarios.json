@@ -1,0 +1,507 @@
+{
+  "meta": {
+    "mock": true,
+    "note": "Illustrative values only. Not model output. Replace with Integrated Analysis Tool exports.",
+    "horizon": 2030,
+    "generated": "2026-10-28"
+  },
+  "counties": [
+    {
+      "fips": "13121",
+      "name": "Fulton",
+      "households": 450000
+    },
+    {
+      "fips": "13135",
+      "name": "Gwinnett",
+      "households": 330000
+    },
+    {
+      "fips": "13089",
+      "name": "DeKalb",
+      "households": 300000
+    },
+    {
+      "fips": "13067",
+      "name": "Cobb",
+      "households": 290000
+    },
+    {
+      "fips": "13057",
+      "name": "Cherokee",
+      "households": 105000
+    },
+    {
+      "fips": "13063",
+      "name": "Clayton",
+      "households": 100000
+    },
+    {
+      "fips": "13117",
+      "name": "Forsyth",
+      "households": 85000
+    },
+    {
+      "fips": "13151",
+      "name": "Henry",
+      "households": 85000
+    },
+    {
+      "fips": "13097",
+      "name": "Douglas",
+      "households": 52000
+    },
+    {
+      "fips": "13113",
+      "name": "Fayette",
+      "households": 45000
+    },
+    {
+      "fips": "13247",
+      "name": "Rockdale",
+      "households": 34000
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "ghg",
+      "label": "Greenhouse gas emissions",
+      "unit": "kt CO₂e / yr",
+      "better": "lower",
+      "aggregate": "sum",
+      "decimals": 0
+    },
+    {
+      "id": "bill",
+      "label": "Average household electricity bill",
+      "unit": "$ / month",
+      "better": "lower",
+      "aggregate": "mean",
+      "decimals": 0
+    },
+    {
+      "id": "peak",
+      "label": "Summer peak demand",
+      "unit": "MW",
+      "better": "lower",
+      "aggregate": "sum",
+      "decimals": 0
+    },
+    {
+      "id": "burden",
+      "label": "Energy burden, low-income households",
+      "unit": "% of income",
+      "better": "lower",
+      "aggregate": "mean",
+      "decimals": 1
+    },
+    {
+      "id": "unserved",
+      "label": "Expected unserved energy",
+      "unit": "MWh / yr",
+      "better": "lower",
+      "aggregate": "sum",
+      "decimals": 0
+    },
+    {
+      "id": "jobs",
+      "label": "Local jobs supported",
+      "unit": "jobs",
+      "better": "higher",
+      "aggregate": "sum",
+      "decimals": 0
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "bau",
+      "label": "Business as usual",
+      "short": "BAU",
+      "macap": null,
+      "description": "Current policies and the utility resource plan, with forecast load growth including data centers."
+    },
+    {
+      "id": "m4",
+      "label": "Residential efficiency retrofits",
+      "short": "Retrofits",
+      "macap": 4,
+      "description": "Envelope upgrades and heat pumps in existing homes, prioritising older housing stock."
+    },
+    {
+      "id": "m5",
+      "label": "Green building codes",
+      "short": "Codes",
+      "macap": 5,
+      "description": "Stronger energy codes for new residential and commercial construction."
+    },
+    {
+      "id": "m20",
+      "label": "Rooftop solar with batteries",
+      "short": "Solar + storage",
+      "macap": 20,
+      "description": "Behind-the-meter solar paired with home batteries that discharge during the evening peak."
+    }
+  ],
+  "values": {
+    "bau": {
+      "13057": {
+        "ghg": 704,
+        "bill": 134.3,
+        "peak": 448.1,
+        "burden": 7.72,
+        "unserved": 200,
+        "jobs": 271.6
+      },
+      "13063": {
+        "ghg": 611.1,
+        "bill": 158.9,
+        "peak": 415.2,
+        "burden": 7.1,
+        "unserved": 191,
+        "jobs": 241.2
+      },
+      "13067": {
+        "ghg": 1642.4,
+        "bill": 158.5,
+        "peak": 1179.5,
+        "burden": 8.21,
+        "unserved": 659.1,
+        "jobs": 692
+      },
+      "13089": {
+        "ghg": 1739.2,
+        "bill": 154.8,
+        "peak": 1349.6,
+        "burden": 7.25,
+        "unserved": 696.5,
+        "jobs": 765.6
+      },
+      "13097": {
+        "ghg": 341.9,
+        "bill": 161.6,
+        "peak": 209,
+        "burden": 8.02,
+        "unserved": 103.1,
+        "jobs": 118.9
+      },
+      "13113": {
+        "ghg": 311.2,
+        "bill": 154.7,
+        "peak": 186.4,
+        "burden": 8.12,
+        "unserved": 85.4,
+        "jobs": 119.6
+      },
+      "13117": {
+        "ghg": 550.3,
+        "bill": 156.6,
+        "peak": 389,
+        "burden": 7.93,
+        "unserved": 168.2,
+        "jobs": 224.5
+      },
+      "13121": {
+        "ghg": 2754.3,
+        "bill": 162,
+        "peak": 1694.9,
+        "burden": 7.81,
+        "unserved": 943,
+        "jobs": 1019.8
+      },
+      "13135": {
+        "ghg": 2059.7,
+        "bill": 144.5,
+        "peak": 1316.5,
+        "burden": 7.28,
+        "unserved": 703.3,
+        "jobs": 754.2
+      },
+      "13151": {
+        "ghg": 540.2,
+        "bill": 165.2,
+        "peak": 341.4,
+        "burden": 7.76,
+        "unserved": 197.7,
+        "jobs": 223.5
+      },
+      "13247": {
+        "ghg": 225.9,
+        "bill": 156.9,
+        "peak": 153.3,
+        "burden": 7.99,
+        "unserved": 77.5,
+        "jobs": 75.7
+      }
+    },
+    "m4": {
+      "13057": {
+        "ghg": 622.2,
+        "bill": 118.4,
+        "peak": 423,
+        "burden": 6.01,
+        "unserved": 173.8,
+        "jobs": 284.4
+      },
+      "13063": {
+        "ghg": 573.7,
+        "bill": 131.5,
+        "peak": 393,
+        "burden": 5.42,
+        "unserved": 173,
+        "jobs": 252.5
+      },
+      "13067": {
+        "ghg": 1497.4,
+        "bill": 139.2,
+        "peak": 1121.1,
+        "burden": 6.51,
+        "unserved": 561,
+        "jobs": 738.8
+      },
+      "13089": {
+        "ghg": 1574.6,
+        "bill": 136.9,
+        "peak": 1271.1,
+        "burden": 6.18,
+        "unserved": 629.9,
+        "jobs": 820.2
+      },
+      "13097": {
+        "ghg": 319,
+        "bill": 143,
+        "peak": 192.8,
+        "burden": 5.97,
+        "unserved": 94.1,
+        "jobs": 125.1
+      },
+      "13113": {
+        "ghg": 292.1,
+        "bill": 130.4,
+        "peak": 175.3,
+        "burden": 6.4,
+        "unserved": 76.6,
+        "jobs": 128.5
+      },
+      "13117": {
+        "ghg": 508.5,
+        "bill": 136.7,
+        "peak": 356.6,
+        "burden": 6.26,
+        "unserved": 149.9,
+        "jobs": 238.2
+      },
+      "13121": {
+        "ghg": 2453.6,
+        "bill": 140.3,
+        "peak": 1608,
+        "burden": 6.23,
+        "unserved": 849.7,
+        "jobs": 1075.5
+      },
+      "13135": {
+        "ghg": 1930.6,
+        "bill": 118.9,
+        "peak": 1202.4,
+        "burden": 5.37,
+        "unserved": 639.8,
+        "jobs": 795.2
+      },
+      "13151": {
+        "ghg": 476.9,
+        "bill": 141.2,
+        "peak": 321.2,
+        "burden": 6.44,
+        "unserved": 171.2,
+        "jobs": 236.3
+      },
+      "13247": {
+        "ghg": 206.6,
+        "bill": 128.1,
+        "peak": 139.2,
+        "burden": 5.65,
+        "unserved": 66,
+        "jobs": 79.3
+      }
+    },
+    "m5": {
+      "13057": {
+        "ghg": 684.8,
+        "bill": 129,
+        "peak": 436.9,
+        "burden": 7.34,
+        "unserved": 187.6,
+        "jobs": 278
+      },
+      "13063": {
+        "ghg": 587,
+        "bill": 151.1,
+        "peak": 403.9,
+        "burden": 6.71,
+        "unserved": 179.9,
+        "jobs": 248.9
+      },
+      "13067": {
+        "ghg": 1584.6,
+        "bill": 152.7,
+        "peak": 1131.9,
+        "burden": 7.86,
+        "unserved": 633.4,
+        "jobs": 708.6
+      },
+      "13089": {
+        "ghg": 1691.3,
+        "bill": 147.7,
+        "peak": 1319.7,
+        "burden": 6.97,
+        "unserved": 664.1,
+        "jobs": 784.1
+      },
+      "13097": {
+        "ghg": 325.7,
+        "bill": 154.2,
+        "peak": 203.1,
+        "burden": 7.75,
+        "unserved": 99.6,
+        "jobs": 121.4
+      },
+      "13113": {
+        "ghg": 297.8,
+        "bill": 145.5,
+        "peak": 181.7,
+        "burden": 7.83,
+        "unserved": 81,
+        "jobs": 122.4
+      },
+      "13117": {
+        "ghg": 523.6,
+        "bill": 147.3,
+        "peak": 378.1,
+        "burden": 7.68,
+        "unserved": 161.9,
+        "jobs": 233.5
+      },
+      "13121": {
+        "ghg": 2659.7,
+        "bill": 152.6,
+        "peak": 1631.2,
+        "burden": 7.55,
+        "unserved": 896.5,
+        "jobs": 1055.5
+      },
+      "13135": {
+        "ghg": 2005.1,
+        "bill": 136.5,
+        "peak": 1282.3,
+        "burden": 6.97,
+        "unserved": 659.5,
+        "jobs": 784.2
+      },
+      "13151": {
+        "ghg": 511.2,
+        "bill": 158,
+        "peak": 329.7,
+        "burden": 7.36,
+        "unserved": 187.4,
+        "jobs": 231.2
+      },
+      "13247": {
+        "ghg": 214.4,
+        "bill": 148.4,
+        "peak": 149,
+        "burden": 7.68,
+        "unserved": 73.9,
+        "jobs": 78.6
+      }
+    },
+    "m20": {
+      "13057": {
+        "ghg": 612.1,
+        "bill": 124.3,
+        "peak": 380,
+        "burden": 7.21,
+        "unserved": 155.8,
+        "jobs": 304.5
+      },
+      "13063": {
+        "ghg": 567.1,
+        "bill": 141.1,
+        "peak": 371.9,
+        "burden": 6.72,
+        "unserved": 158.4,
+        "jobs": 268.3
+      },
+      "13067": {
+        "ghg": 1516.3,
+        "bill": 148.9,
+        "peak": 1024.3,
+        "burden": 7.5,
+        "unserved": 554.6,
+        "jobs": 753.8
+      },
+      "13089": {
+        "ghg": 1483,
+        "bill": 144.6,
+        "peak": 1238.6,
+        "burden": 6.87,
+        "unserved": 567.7,
+        "jobs": 850.5
+      },
+      "13097": {
+        "ghg": 296.8,
+        "bill": 145.3,
+        "peak": 178,
+        "burden": 7.28,
+        "unserved": 80.5,
+        "jobs": 130.7
+      },
+      "13113": {
+        "ghg": 276.1,
+        "bill": 144.6,
+        "peak": 157,
+        "burden": 7.68,
+        "unserved": 74.3,
+        "jobs": 133
+      },
+      "13117": {
+        "ghg": 500.9,
+        "bill": 141.6,
+        "peak": 340.2,
+        "burden": 7.46,
+        "unserved": 130.6,
+        "jobs": 244.7
+      },
+      "13121": {
+        "ghg": 2495,
+        "bill": 147.9,
+        "peak": 1522.3,
+        "burden": 7.01,
+        "unserved": 714.5,
+        "jobs": 1127.9
+      },
+      "13135": {
+        "ghg": 1870.9,
+        "bill": 131.6,
+        "peak": 1115.1,
+        "burden": 6.5,
+        "unserved": 522.4,
+        "jobs": 844.9
+      },
+      "13151": {
+        "ghg": 498.4,
+        "bill": 153.4,
+        "peak": 287.8,
+        "burden": 7.22,
+        "unserved": 149.3,
+        "jobs": 243.6
+      },
+      "13247": {
+        "ghg": 200.8,
+        "bill": 141,
+        "peak": 137.4,
+        "burden": 7.47,
+        "unserved": 59,
+        "jobs": 83.6
+      }
+    }
+  }
+}

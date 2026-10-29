@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import Figure from '../components/Figure.astro';
+import PageHead from '../components/PageHead.astro';
+import NextChapter from '../components/NextChapter.astro';
+---
+
+<Base title="Local generation and storage" active="local-generation/">
+  <PageHead slug="local-generation/">
+    New technology is changing how Atlanta makes, stores and manages electricity. Local and distributed energy
+    resources reduce dependence on the wider grid and make the whole system more resilient and efficient.
+  </PageHead>
+
+  <section class="section wrap">
+    <div class="split">
+      <div class="prose">
+        <h2>Local generation</h2>
+        <p>Atlanta gets about <strong>5.2 hours</strong> of peak sunlight a day on average.</p>
+        <p>
+          Rooftop solar potential across the region is estimated at <strong>4,800 MW</strong>, with more room for
+          ground-mounted systems, solar parking canopies and community solar gardens.
+        </p>
+      </div>
+      <div class="prose">
+        <h2>Storage and EVs</h2>
+        <p>
+          Batteries are increasingly installed alongside solar and at key points on the grid. They shave peaks, keep
+          the lights on during outages, and shift solar power into the evening when demand is high.
+        </p>
+        <p>
+          More electric vehicles now support two-way charging, so their batteries can power a home or building in an
+          emergency.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="flush">Why it's needed</h2>
+    <div class="split">
+      <div class="prose">
+        <p>
+          Local generation and storage can soften weather-related outages that hit millions of customers, especially
+          in large metro areas like Atlanta. These disruptions are becoming more common as the climate changes.
+        </p>
+        <h3>What Georgia is already doing</h3>
+        <p>
+          Georgia has been investing in battery storage and solar generation for the past five to ten years, along
+          with technology like two-way power flows that makes decentralized energy more flexible.
+        </p>
+      </div>
+      <Figure src="lg_texas.png" alt="Photo from the February 2021 Texas winter storm power outage" caption="The 2021 Texas winter outage. Source: NPR" variant="bare" max={460} />
+    </div>
+    <div class="split">
+      <Figure src="lg_bat.png" alt="Utility-scale battery storage installation" caption="Battery storage. Source: Georgia Power" />
+      <Figure src="lg_capacity.png" alt="Chart of growth in Georgia's solar and battery capacity" caption="Source: U.S. Energy Information Administration" />
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="flush">Flexible energy management</h2>
+    <Figure src="lg_flexible.png" sizes="(min-width: 1024px) 1100px, 100vw" alt="Diagram of flexible energy management across solar, batteries, EVs and the grid" />
+  </section>
+
+  <NextChapter slug="local-generation/" />
+</Base>
+
+<style>
+  .flush { margin-top: 0; }
+</style>

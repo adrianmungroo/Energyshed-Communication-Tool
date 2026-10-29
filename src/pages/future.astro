@@ -1,0 +1,186 @@
+---
+import Base from '../layouts/Base.astro';
+import Figure from '../components/Figure.astro';
+import PageHead from '../components/PageHead.astro';
+import NextChapter from '../components/NextChapter.astro';
+import { dashboard, url } from '../site';
+
+// These GIFs/PNGs are still hosted on Imgur. Move them into public/images
+// so the site doesn't depend on a third-party host.
+const remote = {
+  resHeatpump: 'https://i.imgur.com/qJpCqbP.gif',
+  comHeatpumpA: 'https://i.imgur.com/3XtFCgq.gif',
+  comHeatpumpB: 'https://i.imgur.com/7D9aWnT.gif',
+  baseline: 'https://i.imgur.com/rh77Nzv.png',
+  utility: 'https://i.imgur.com/1wlZaIK.png',
+  der: 'https://i.imgur.com/cxuTk9f.png',
+  solar: 'https://i.imgur.com/IGZtDZV.gif',
+};
+---
+
+<Base title="Looking to the future" active="future/">
+  <PageHead slug="future/">
+    The grid edge model now covers all 11 counties of the Atlanta region. Here's an early look at what it can show.
+  </PageHead>
+
+  <section class="section wrap">
+    <h2 class="flush">Heat pump retrofits, building by building</h2>
+    <div class="split">
+      <Figure src={remote.resHeatpump} alt="Animated map comparing residential energy use at baseline and after heat pump retrofits" caption="Residential: baseline compared with heat pump retrofits" />
+      <div class="stack">
+        <Figure src={remote.comHeatpumpA} alt="Animated map comparing commercial energy use at baseline and after heat pump retrofits" caption="Commercial: baseline compared with heat pump retrofits" />
+        <Figure src={remote.comHeatpumpB} alt="Second animated view of commercial heat pump retrofit impacts" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="prose">
+      <h2 class="flush">Supply and demand scenarios</h2>
+      <p>
+        These mock-ups compare how the region's energy mix could change. The black triangle marks the cost and
+        pollution level of each fuel mix.
+      </p>
+    </div>
+
+    <div class="tabs" data-tabs>
+      <div class="tabs__list" role="tablist" aria-label="Scenario">
+        <button role="tab" id="tab-utility" aria-controls="panel-utility" aria-selected="true">Utility investment in renewables</button>
+        <button role="tab" id="tab-der" aria-controls="panel-der" aria-selected="false" tabindex="-1">Distributed energy at the grid edge</button>
+      </div>
+      <div class="split">
+        <div>
+          <h3>Today's mix</h3>
+          <p class="muted">How the region gets and uses electricity now: the reference point.</p>
+          <Figure src={remote.baseline} alt="Mock-up of the baseline energy mix with cost and pollution marker" />
+        </div>
+        <div>
+          <div role="tabpanel" id="panel-utility" aria-labelledby="tab-utility">
+            <h3>Utility investment in renewables</h3>
+            <p class="muted">Power companies lead the transition with large-scale renewable projects.</p>
+            <Figure src={remote.utility} alt="Mock-up of the energy mix after utility-led renewable investment" />
+          </div>
+          <div role="tabpanel" id="panel-der" aria-labelledby="tab-der" hidden>
+            <h3>Distributed energy at the grid edge</h3>
+            <p class="muted">Customers adopt solar, storage and smart devices behind the meter.</p>
+            <Figure src={remote.der} alt="Mock-up of the energy mix after customer-led distributed energy adoption" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">These scenario results are conceptual mock-ups. They are not empirically accurate or drawn to scale.</p>
+  </section>
+
+  <section class="section wrap">
+    <div class="split split--figure-wide">
+      <div class="prose">
+        <h2 class="flush">Solar and batteries soften the peak</h2>
+        <p>
+          On the left, current energy use. On the right, the same area after solar and battery incentives for
+          single-family homes. Residential peaks flatten out.
+        </p>
+      </div>
+      <Figure src={remote.solar} alt="Animated comparison of residential energy use before and after solar and battery incentives" />
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="flush">The supply stack in our balancing authority</h2>
+    <p class="muted">Southern Company (SOCO) balancing authority.</p>
+    <Figure src="temp_images/ss1.png" sizes="(min-width: 1024px) 1100px, 100vw" alt="Supply stack chart for the SOCO balancing authority" />
+    <Figure src="temp_images/ss2.png" sizes="(min-width: 1024px) 1100px, 100vw" alt="Second supply stack chart for the SOCO balancing authority" class="gap-top" />
+  </section>
+
+  <section class="section wrap">
+    <h2 class="flush">What the tool will measure</h2>
+    <div class="split">
+      <div>
+        <h3>Infrastructure</h3>
+        <ul>
+          <li>Greenhouse gas emissions</li>
+          <li>Utility electricity cost</li>
+          <li>Electric system reliability</li>
+          <li>Value of resilience</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Equity and communities</h3>
+        <ul>
+          <li>Consumer electricity cost</li>
+          <li>Energy equity for underserved communities</li>
+          <li>Jobs and workforce development</li>
+        </ul>
+      </div>
+    </div>
+    <p><a class="button" href={url(dashboard.slug)}>Compare scenarios on the dashboard</a></p>
+  </section>
+
+  <NextChapter slug="future/" />
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const select = (tab: HTMLButtonElement) => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(t.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !on;
+      });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+        const next = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus();
+        select(next);
+      });
+    });
+  });
+</script>
+
+<style>
+  .flush { margin-top: 0; }
+  .muted { color: var(--ink-soft); }
+  .stack { display: grid; gap: 20px; }
+  .tabs .split { margin-top: 1.5rem; }
+  .gap-top { margin-top: 20px; }
+  ul { padding-left: 1.2em; }
+  li { margin-bottom: 0.3em; }
+
+  .tabs__list {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 8px;
+    background: var(--paper-sunken);
+    border: 1px solid var(--rule);
+    margin-top: 1rem;
+  }
+  .tabs__list button {
+    font: 600 0.9rem var(--sans);
+    color: var(--ink);
+    background: none;
+    border: 0;
+    border-radius: 6px;
+    padding: 9px 14px;
+    cursor: pointer;
+  }
+  .tabs__list button[aria-selected='true'] { background: var(--ink); color: var(--paper-raised); }
+
+  .button {
+    display: inline-block;
+    margin-top: 1.5rem;
+    background: var(--ink);
+    color: var(--paper);
+    font: 600 0.95rem var(--sans);
+    text-decoration: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+  }
+  .button:hover { background: var(--accent); }
+</style>

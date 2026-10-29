@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import Figure from '../components/Figure.astro';
+import PageHead from '../components/PageHead.astro';
+import NextChapter from '../components/NextChapter.astro';
+---
+
+<Base title="Energy efficiency" active="efficiency/">
+  <PageHead slug="efficiency/">
+    Doing the same things with less energy. In Atlanta homes that starts with LED bulbs, efficient appliances and
+    smart thermostats, and goes as far as new insulation and heat pumps.
+  </PageHead>
+
+  <section class="section wrap">
+    <div class="split split--text-wide">
+      <div class="prose">
+        <p>
+          Many older homes lose energy through poor insulation and outdated systems, and these can be fixed. Adding
+          insulation, sealing leaks and installing heat pumps make homes far more efficient. Those upgrades lower
+          bills, ease demand on the grid and cut greenhouse gas emissions, in line with Atlanta's sustainability goals.
+        </p>
+        <h2>The housing envelope</h2>
+        <p>
+          The envelope is your home's outer shell: walls, roof, windows, floor and foundation. It controls how much
+          heat, air and moisture get in or out. A poorly insulated or leaky envelope means higher bills and a less
+          comfortable home.
+        </p>
+        <p>
+          Adding insulation, sealing air leaks and improving the attic can cut household energy use by about{' '}
+          <strong>20 to 30 percent</strong> in Atlanta homes.
+        </p>
+      </div>
+      <Figure src="ee_house.png" alt="Cutaway of an energy-efficient home showing insulation, sealed windows and a heat pump" variant="bare" max={360} />
+    </div>
+    <Figure src="ee_energy_savings.png" alt="Chart comparing household energy use before and after envelope improvements" caption="Household energy use before and after envelope upgrades" max={820} />
+  </section>
+
+  <section class="section wrap">
+    <div class="split">
+      <div class="prose">
+        <h2>Heat pumps</h2>
+        <p>
+          Heat pumps move heat instead of making it. In winter they pull heat in from the outside air; in summer they
+          pump it out of your home.
+        </p>
+        <p>
+          They're 2.5 to 4 times more efficient than gas furnaces or electric resistance heaters, and Atlanta's mild
+          winters suit them well year-round. Replacing an older system with a heat pump can cut heating energy by up
+          to half.
+        </p>
+      </div>
+      <Figure src="ee_impact_heat_pump.png" alt="Bar chart of annual energy use for a typical pre-1980 Atlanta home with and without a heat pump" caption="Annual energy use for a typical pre-1980 Atlanta home, with and without a heat pump" />
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="split">
+      <div class="prose">
+        <h2>Why upgrades matter together</h2>
+        <p>
+          Older homes waste energy through poor insulation, air leaks and outdated equipment. Upgrading the envelope
+          and switching to a heat pump together can nearly halve energy use and significantly reduce carbon
+          emissions.
+        </p>
+      </div>
+      <Figure src="ee_impact_full_retrofit.png" alt="Bar chart comparing annual energy use with envelope upgrades, a heat pump, and both" caption="Annual energy use with envelope and heat pump upgrades" />
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="split">
+      <div class="prose">
+        <h2>What you save</h2>
+        <p>
+          Better insulation, smarter heating and efficient appliances use less electricity and gas, lowering bills by
+          hundreds of dollars a year.
+        </p>
+        <p>
+          Both all-electric and gas-heated homes benefit, especially older ones. The same upgrades also make homes
+          healthier and more comfortable.
+        </p>
+        <Figure src="ee_what_if.png" alt="Illustration asking what would change if homes were upgraded" variant="bare" max={340} />
+      </div>
+      <Figure src="ee_annual_cost_savings.png" alt="Bar chart of annual household energy cost savings by home type" caption="Annual household energy cost savings by home type" />
+    </div>
+    <p class="sources">Sources: DOE, EIA, Southface, NREL, ENERGY STAR and Georgia Power data estimates.</p>
+  </section>
+
+  <NextChapter slug="efficiency/" />
+</Base>

@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import { image } from '../images';
+
+interface Props {
+  /** File name inside src/assets/images, or an absolute http(s) URL. */
+  src: string;
+  alt: string;
+  caption?: string;
+  /** 'bare' drops the white frame (for photos / icons). */
+  variant?: 'frame' | 'bare';
+  /** Max rendered width in px (keeps small charts from blowing up). */
+  max?: number;
+  /** Rough display width, used to pick the right file size. Default: half the content width. */
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  caption,
+  variant = 'frame',
+  max,
+  sizes = max ? `(min-width: ${max + 64}px) ${max}px, 100vw` : '(min-width: 1024px) 560px, 100vw',
+  class: extra,
+} = Astro.props;
+const remote = /^https?:\/\//.test(src);
+const style = max ? `max-width:${max}px` : undefined;
+---
+
+<figure class:list={['figure', variant === 'bare' && 'figure--bare', extra]} style={style}>
+  <div class="figure__frame">
+    {remote ? (
+      <img src={src} alt={alt} loading="lazy" decoding="async" />
+    ) : (
+      <Image
+        src={image(src)}
+        alt={alt}
+        widths={[400, 640, 960, 1280, 1800]}
+        sizes={sizes}
+        format="webp"
+        quality={82}
+        loading="lazy"
+      />
+    )}
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

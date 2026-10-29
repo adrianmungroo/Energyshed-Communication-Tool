@@ -1,0 +1,249 @@
+---
+import '../styles/global.css';
+import { chapters, dashboard, url } from '../site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Path relative to base used to highlight the active nav item. */
+  active?: string;
+  /** Wider content area for the dashboard. */
+  app?: boolean;
+}
+
+const {
+  title,
+  description = "How metro Atlanta's electricity is made, moved and used, and what different choices could change.",
+  active = '',
+  app = false,
+} = Astro.props;
+const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta Energyshed`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+  </head>
+  <body class:list={['shell', app && 'is-app']}>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="topbar">
+      <a class="brand brand--compact" href={url('')}>Atlanta Energyshed</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+    </header>
+
+    <aside id="sidebar" class="sidebar">
+      <a class="brand" href={url('')}>
+        <span class="brand__name">Atlanta Energyshed</span>
+        <span class="brand__tag">How the region's power is made, moved and used</span>
+      </a>
+
+      <nav aria-label="Site">
+        <p class="sidebar__group" id="nav-learn">Learn</p>
+        <ol class="sidebar__list" aria-labelledby="nav-learn">
+          {chapters.map((c, i) => (
+            <li>
+              <a href={url(c.slug)} aria-current={active === c.slug ? 'page' : undefined}>
+                <span class="sidebar__num">{i + 1}</span>
+                {c.title}
+              </a>
+            </li>
+          ))}
+        </ol>
+
+        <p class="sidebar__group" id="nav-explore">Explore</p>
+        <ul class="sidebar__list" aria-labelledby="nav-explore">
+          <li>
+            <a href={url(dashboard.slug)} aria-current={active === dashboard.slug ? 'page' : undefined}>
+              <span class="sidebar__dot" style="background: var(--fuel-nuclear)"></span>
+              {dashboard.title}
+            </a>
+          </li>
+        </ul>
+
+        <p class="sidebar__group" id="nav-about">About</p>
+        <ul class="sidebar__list" aria-labelledby="nav-about">
+          <li>
+            <a href="https://energyshed.research.gatech.edu/">
+              <span class="sidebar__dot sidebar__dot--hollow"></span>
+              Project website
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <dl class="sidebar__meta">
+        <div><dt>Region</dt><dd>11 counties</dd></div>
+        <div><dt>Dashboard data</dt><dd>Mock</dd></div>
+      </dl>
+    </aside>
+
+    <div class="shell__main">
+      <main id="main" class:list={['main', app && 'main--app']}>
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <p>
+          A communication tool of the Georgia Tech{' '}
+          <a href="https://energyshed.research.gatech.edu/">Atlanta Energyshed project</a>, with the Atlanta Regional Commission.
+          Figures marked as mock-ups are illustrative and not model output.
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+      const sidebar = document.getElementById('sidebar');
+      const setOpen = (open: boolean) => {
+        toggle?.setAttribute('aria-expanded', String(open));
+        sidebar?.classList.toggle('is-open', open);
+        document.body.classList.toggle('nav-open', open);
+      };
+      toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar?.classList.contains('is-open')) {
+          setOpen(false);
+          toggle?.focus();
+        }
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  .shell { min-height: 100vh; }
+  @media (min-width: 1024px) {
+    .shell {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+      background: linear-gradient(90deg, var(--sidebar) var(--sidebar-w), var(--paper) var(--sidebar-w));
+    }
+  }
+
+  /* ---- Sidebar ---- */
+  .sidebar {
+    background: var(--sidebar);
+    color: var(--sidebar-ink);
+    display: flex;
+    flex-direction: column;
+    padding: 22px 14px 18px;
+    gap: 6px;
+  }
+  @media (min-width: 1024px) {
+    .sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  }
+
+  .brand { display: block; color: var(--sidebar-ink); text-decoration: none; padding: 0 8px 14px; }
+  .brand__name { display: block; font-weight: 750; font-size: 1.05rem; letter-spacing: -0.01em; }
+  .brand__tag { display: block; color: var(--sidebar-muted); font-size: 0.8rem; line-height: 1.35; margin-top: 4px; }
+
+  .sidebar__group {
+    font-size: 0.7rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sidebar-muted);
+    margin: 18px 8px 6px;
+  }
+  .sidebar__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .sidebar__list a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: var(--sidebar-ink);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .sidebar__list a:hover { background: var(--sidebar-active); }
+  .sidebar__list a[aria-current='page'] { background: var(--sidebar-active); font-weight: 650; }
+  .sidebar__list a[aria-current='page'] .sidebar__num { background: #fff; color: var(--sidebar); border-color: #fff; }
+  .sidebar__list a:focus-visible { outline-color: #9fbaff; }
+
+  .sidebar__num {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    border: 1px solid var(--sidebar-muted);
+    color: var(--sidebar-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .sidebar__dot { flex: none; width: 8px; height: 8px; border-radius: 999px; margin-inline: 6px; }
+  .sidebar__dot--hollow { border: 1.5px solid var(--sidebar-muted); }
+
+  .sidebar__meta {
+    margin: auto 0 0;
+    padding: 14px 8px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 0.78rem;
+    display: grid;
+    gap: 6px;
+  }
+  .sidebar__meta div { display: flex; justify-content: space-between; gap: 12px; }
+  .sidebar__meta dt { color: var(--sidebar-muted); }
+  .sidebar__meta dd { margin: 0; font-weight: 600; text-align: right; }
+
+  /* ---- Mobile top bar + drawer ---- */
+  .topbar {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: var(--sidebar);
+    color: var(--sidebar-ink);
+    padding: 10px var(--gutter);
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand--compact { padding: 0; font-weight: 750; }
+  .nav-toggle {
+    font: 600 0.9rem var(--sans);
+    color: var(--sidebar-ink);
+    background: var(--sidebar-active);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    padding: 7px 12px;
+    cursor: pointer;
+  }
+  @media (max-width: 1023px) {
+    .topbar { display: flex; }
+    .sidebar {
+      position: fixed;
+      z-index: 40;
+      top: 52px;
+      left: 0;
+      bottom: 0;
+      width: min(300px, 86vw);
+      overflow-y: auto;
+      transform: translateX(-100%);
+      visibility: hidden;
+      transition: transform 0.2s ease, visibility 0.2s;
+    }
+    .sidebar .brand { display: none; }
+    .sidebar.is-open { transform: none; visibility: visible; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35); }
+  }
+
+  /* ---- Main ---- */
+  .main { padding: clamp(20px, 4vw, 40px) var(--gutter) 8px; }
+  .main--app { padding-top: clamp(16px, 3vw, 28px); }
+  .site-footer {
+    padding: 8px var(--gutter) 32px;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+  }
+  .site-footer p { max-width: var(--wide); margin: 0 auto; }
+  .is-app .site-footer p { max-width: none; }
+</style>

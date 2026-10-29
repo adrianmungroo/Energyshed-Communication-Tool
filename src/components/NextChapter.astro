@@ -1,0 +1,35 @@
+---
+import { chapters, dashboard, url } from '../site';
+
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+const i = chapters.findIndex((c) => c.slug === slug);
+const next = chapters[i + 1] ?? { slug: dashboard.slug, title: dashboard.title };
+const label = chapters[i + 1] ? `Next: chapter ${i + 2}` : 'Next: try it yourself';
+---
+
+<nav class="next wrap" aria-label="Next chapter">
+  <a href={url(next.slug)}>
+    <span class="next__label">{label}</span>
+    <span class="next__title">{next.title}</span>
+  </a>
+</nav>
+
+<style>
+  .next { margin-top: 4px; display: flex; justify-content: flex-end; }
+  .next a {
+    display: block;
+    min-width: min(100%, 340px);
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .next a:hover { border-color: var(--accent); }
+  .next__label { display: block; color: var(--ink-soft); font-size: var(--step--1); }
+  .next__title { display: block; font-size: var(--step-1); font-weight: 700; letter-spacing: -0.015em; color: var(--accent); }
+</style>

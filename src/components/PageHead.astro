@@ -1,0 +1,17 @@
+---
+import { chapters } from '../site';
+
+interface Props {
+  slug: string;
+  title?: string;
+}
+const { slug, title } = Astro.props;
+const index = chapters.findIndex((c) => c.slug === slug);
+const chapter = chapters[index];
+---
+
+<header class="page-head wrap">
+  {index >= 0 && <p class="eyebrow">Chapter {index + 1} of {chapters.length}</p>}
+  <h1>{title ?? chapter?.title}</h1>
+  <div class="lede"><slot /></div>
+</header>
