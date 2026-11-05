@@ -1,30 +1,32 @@
-// Generates public/datasets/scenarios.json with clearly-labelled MOCK values.
+// Generates public/datasets/scenarios.json with clearly-labelled MOCK values
+// for every county in public/datasets/counties.geojson (run `npm run regions` first).
 // Replace this file's output with real IAT exports when they are available;
 // the dashboard only depends on the JSON shape documented in README.md.
 //
 //   npm run mock-data
 
-import { writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 // Deterministic PRNG so the mock file is stable between runs.
 let seed = 20261028;
 const rand = () => ((seed = (seed * 1664525 + 1013904223) % 2 ** 32) / 2 ** 32);
 const jitter = (spread) => 1 + (rand() * 2 - 1) * spread;
 
-// Approximate household counts, used only to weight per-household outcomes.
-const counties = [
-  { fips: '13121', name: 'Fulton', households: 450000 },
-  { fips: '13135', name: 'Gwinnett', households: 330000 },
-  { fips: '13089', name: 'DeKalb', households: 300000 },
-  { fips: '13067', name: 'Cobb', households: 290000 },
-  { fips: '13057', name: 'Cherokee', households: 105000 },
-  { fips: '13063', name: 'Clayton', households: 100000 },
-  { fips: '13117', name: 'Forsyth', households: 85000 },
-  { fips: '13151', name: 'Henry', households: 85000 },
-  { fips: '13097', name: 'Douglas', households: 52000 },
-  { fips: '13113', name: 'Fayette', households: 45000 },
-  { fips: '13247', name: 'Rockdale', households: 34000 },
-];
+// Approximate household counts for the ARC counties; every other county gets a
+// made-up size. Used only to weight per-household outcomes.
+const arcHouseholds = {
+  '13121': 450000, '13135': 330000, '13089': 300000, '13067': 290000, '13057': 105000, '13063': 100000,
+  '13117': 85000, '13151': 85000, '13097': 52000, '13113': 45000, '13247': 34000,
+};
+const geo = JSON.parse(readFileSync(new URL('../public/datasets/counties.geojson', import.meta.url), 'utf8'));
+const counties = geo.features
+  .map((f) => ({
+    fips: f.properties.fips,
+    name: f.properties.name,
+    state: f.properties.state,
+    households: arcHouseholds[f.properties.fips] ?? Math.round((4000 + rand() ** 2 * 60000) / 100) * 100,
+  }))
+  .sort((a, b) => a.fips.localeCompare(b.fips));
 
 // The six outcomes are placeholders until the ERC's
 // "Dashboard Scenarios and Outcomes" list is wired in.
@@ -91,5 +93,5 @@ const out = {
   values,
 };
 
-writeFileSync(new URL('../public/datasets/scenarios.json', import.meta.url), JSON.stringify(out, null, 2) + '\n');
-console.log('Wrote public/datasets/scenarios.json');
+writeFileSync(new URL('../public/datasets/scenarios.json', import.meta.url), JSON.stringify(out) + '\n');
+console.log(`Wrote public/datasets/scenarios.json (${counties.length} counties)`);

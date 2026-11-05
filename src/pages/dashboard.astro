@@ -23,7 +23,6 @@ import { url } from '../site';
         </label>
         <div class="pills">
           <span class="pill pill--warn">Mock data</span>
-          <span class="pill">County level</span>
           <span class="pill"><span data-horizon>2030</span></span>
         </div>
       </div>
@@ -36,17 +35,28 @@ import { url } from '../site';
 
     <div class="dash__grid">
       <section class="card card--map" aria-labelledby="map-h">
-        <p class="card-label">Map</p>
+        <div class="map-top">
+          <p class="card-label">Map</p>
+          <div class="seg" role="group" aria-label="Map area" data-regions></div>
+        </div>
         <div class="map-head">
           <div>
             <h2 id="map-h" data-map-title>Loading…</h2>
             <p class="map-sub" data-map-sub></p>
           </div>
-          <button type="button" class="link-button" data-clear-county hidden>Show whole region</button>
+          <button type="button" class="link-button" data-clear-county hidden>Show whole area</button>
         </div>
         <div class="map" data-map aria-describedby="map-help"></div>
-        <div class="legend" data-legend aria-hidden="true"></div>
-        <p id="map-help" class="hint">Select a county to see its numbers. Use Tab to move between counties.</p>
+        <div class="legend-row">
+          <div class="legend" data-legend aria-hidden="true"></div>
+          <span class="context-key" data-context-key hidden><span class="context-key__swatch"></span>Atlanta region</span>
+        </div>
+        <p class="region-note" data-region-note></p>
+        <label class="county-find">
+          <span>County</span>
+          <span class="select select--small"><select data-county-select></select></span>
+        </label>
+        <p id="map-help" class="hint">Select a county on the map or from the list to see its numbers.</p>
       </section>
 
       <section class="card card--outcomes" aria-labelledby="out-h">
@@ -159,9 +169,50 @@ import { url } from '../site';
   .hint { color: var(--ink-soft); font-size: 0.84rem; margin: 0.3rem 0 0; line-height: 1.4; }
 
   /* ---- Map ---- */
+  .map-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+  .map-top .card-label { margin: 0; }
+  .seg {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 8px;
+    background: var(--paper-sunken);
+    border: 1px solid var(--rule);
+  }
+  .seg__btn {
+    font: 600 0.82rem var(--sans);
+    color: var(--ink-soft);
+    background: none;
+    border: 0;
+    border-radius: 6px;
+    padding: 6px 11px;
+    cursor: pointer;
+  }
+  .seg__btn:hover { color: var(--ink); }
+  @media (max-width: 560px) {
+    .seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; }
+    .seg__btn { padding: 7px 6px; line-height: 1.2; }
+  }
+  .seg__btn[aria-pressed='true'] { background: var(--ink); color: var(--paper-raised); }
+
+  .legend-row { display: flex; justify-content: space-between; align-items: center; gap: 4px 16px; flex-wrap: wrap; }
+  .legend-row .legend { flex: 1 1 300px; }
+  .context-key { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--ink-soft); margin-top: 12px; }
+  .context-key__swatch { width: 18px; height: 12px; border: 2px solid var(--ink); border-radius: 2px; }
+  .context-outline path { fill: none; stroke: var(--ink); stroke-width: 1.25; pointer-events: none; }
+  .map svg.is-large .county { stroke-width: 0.4; }
+  .map svg.is-large .county.is-selected { stroke-width: 2; }
+  .region-note { font-size: 0.82rem; color: var(--ink-soft); margin: 10px 0 0; line-height: 1.4; }
+  .region-note.is-approx::before { content: 'Approximate. '; font-weight: 650; color: var(--ink); }
+
+  .county-find { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 0.84rem; color: var(--ink-soft); }
+  .select--small select { min-width: 0; width: auto; max-width: 100%; padding: 7px 34px 7px 10px; font-size: 0.86rem; }
+  .select--small::after { right: 12px; }
   .map-head { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
   .map-sub { margin: 0; color: var(--ink-soft); font-size: 0.86rem; }
   .map { max-width: 560px; margin-inline: auto; }
+  .map svg { max-height: 640px; }
   .map svg { width: 100%; height: auto; display: block; margin-top: 8px; }
   .county { stroke: var(--paper-raised); stroke-width: 1.5; cursor: pointer; transition: opacity 0.15s; }
   .county:hover { opacity: 0.85; }
