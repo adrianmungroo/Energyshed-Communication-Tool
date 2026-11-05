@@ -4,9 +4,6 @@ A static rebuild of the original Streamlit communication tool, built with [Astro
 It compiles to plain HTML, CSS, JS and JSON, so it can be hosted on GitHub Pages
 (or any static host) with no server or database.
 
-# Human note (Adrian Mungroo)
-- This entire project is AI generated. Please feel free to edit this as you see fit. 
-
 ## Run it locally
 
 Requires Node 22.23.4 or newer (`node -v` to check).
