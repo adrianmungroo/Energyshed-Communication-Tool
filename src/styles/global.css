@@ -5,9 +5,9 @@
    neutrals, a dark navy sidebar, blue/indigo accents, green/red only for
    better/worse. Swap these values once the shared palette is agreed. */
 :root {
-  --paper: #f5f5f7;          /* page background */
-  --paper-raised: #FEF8EC;   /* cards */
-  --paper-sunken: #FAFAFA;   /* inset areas inside cards */
+  --paper: #FAFAFA;          /* page background */
+  --paper-raised: #ffffff;   /* cards */
+  --paper-sunken: #ffffff;   /* inset areas inside cards */
   --ink: #0f172a;
   --ink-soft: #64748b;
   --rule: #e2e8f0;
