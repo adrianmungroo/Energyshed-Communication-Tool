@@ -153,11 +153,8 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
       });
 
       const themeButtons = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
-      const resolvedTheme = () => {
-        const stored = document.documentElement.dataset.theme;
-        if (stored === 'light' || stored === 'dark') return stored;
-        return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      };
+      const resolvedTheme = (): 'light' | 'dark' =>
+        document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
       const syncTheme = (theme: 'light' | 'dark') => {
         themeButtons.forEach((btn) => {
           btn.setAttribute('aria-pressed', String(theme === 'dark'));
@@ -175,10 +172,6 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
         btn.addEventListener('click', () => setTheme(resolvedTheme() === 'dark' ? 'light' : 'dark'));
       });
       syncTheme(resolvedTheme());
-      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (document.documentElement.dataset.theme) return;
-        syncTheme(resolvedTheme());
-      });
     </script>
   </body>
 </html>
