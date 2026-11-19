@@ -28,13 +28,34 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    <script is:inline>
+      try {
+        const theme = localStorage.getItem('theme');
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme;
+      } catch {}
+    </script>
   </head>
   <body class:list={['shell', app && 'is-app']}>
     <a class="skip-link" href="#main">Skip to content</a>
 
     <header class="topbar">
       <a class="brand brand--compact" href={url('')}>Atlanta Energyshed</a>
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+      <div class="topbar__actions">
+        <button class="theme-toggle theme-toggle--icon" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to dark mode">
+          <span class="theme-toggle__sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 3v1.5M12 19.5V21M4.2 4.2l1.1 1.1M18.7 18.7l1.1 1.1M3 12h1.5M19.5 12H21M4.2 19.8l1.1-1.1M18.7 5.3l1.1-1.1" />
+            </svg>
+          </span>
+          <span class="theme-toggle__moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 14.3A8.5 8.5 0 0 1 9.7 3 7 7 0 1 0 21 14.3z" />
+            </svg>
+          </span>
+        </button>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Menu</button>
+      </div>
     </header>
 
     <aside id="sidebar" class="sidebar">
@@ -77,10 +98,29 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
         </ul>
       </nav>
 
-      <dl class="sidebar__meta">
-        <div><dt>Map areas</dt><dd>3</dd></div>
-        <div><dt>Dashboard data</dt><dd>Mock</dd></div>
-      </dl>
+      <div class="sidebar__foot">
+        <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to dark mode">
+          <span class="theme-toggle__sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <circle cx="12" cy="12" r="4" />
+              <path d="M12 3v1.5M12 19.5V21M4.2 4.2l1.1 1.1M18.7 18.7l1.1 1.1M3 12h1.5M19.5 12H21M4.2 19.8l1.1-1.1M18.7 5.3l1.1-1.1" />
+            </svg>
+          </span>
+          <span class="theme-toggle__moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 14.3A8.5 8.5 0 0 1 9.7 3 7 7 0 1 0 21 14.3z" />
+            </svg>
+          </span>
+          <span class="theme-toggle__copy">
+            <span class="theme-toggle__kind">Appearance</span>
+            <span data-theme-label>Light</span>
+          </span>
+        </button>
+        <dl class="sidebar__meta">
+          <div><dt>Map areas</dt><dd>3</dd></div>
+          <div><dt>Dashboard data</dt><dd>Mock</dd></div>
+        </dl>
+      </div>
     </aside>
 
     <div class="shell__main">
@@ -110,6 +150,34 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
           setOpen(false);
           toggle?.focus();
         }
+      });
+
+      const themeButtons = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+      const resolvedTheme = () => {
+        const stored = document.documentElement.dataset.theme;
+        if (stored === 'light' || stored === 'dark') return stored;
+        return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      };
+      const syncTheme = (theme: 'light' | 'dark') => {
+        themeButtons.forEach((btn) => {
+          btn.setAttribute('aria-pressed', String(theme === 'dark'));
+          btn.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+          const label = btn.querySelector('[data-theme-label]');
+          if (label) label.textContent = theme === 'dark' ? 'Dark' : 'Light';
+        });
+      };
+      const setTheme = (theme: 'light' | 'dark') => {
+        document.documentElement.dataset.theme = theme;
+        try { localStorage.setItem('theme', theme); } catch {}
+        syncTheme(theme);
+      };
+      themeButtons.forEach((btn) => {
+        btn.addEventListener('click', () => setTheme(resolvedTheme() === 'dark' ? 'light' : 'dark'));
+      });
+      syncTheme(resolvedTheme());
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (document.documentElement.dataset.theme) return;
+        syncTheme(resolvedTheme());
       });
     </script>
   </body>
@@ -184,8 +252,43 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
   .sidebar__dot { flex: none; width: 8px; height: 8px; border-radius: 999px; margin-inline: 6px; }
   .sidebar__dot--hollow { border: 1.5px solid var(--sidebar-muted); }
 
+  .sidebar__foot { margin-top: auto; }
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 12px 0 0;
+    padding: 8px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 8px;
+    background: var(--sidebar-active);
+    color: var(--sidebar-ink);
+    font: 500 0.86rem var(--sans);
+    cursor: pointer;
+    text-align: left;
+  }
+  .theme-toggle:hover { background: rgba(255, 255, 255, 0.14); }
+  .theme-toggle__copy { display: grid; line-height: 1.2; }
+  .theme-toggle__kind {
+    font-size: 0.68rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sidebar-muted);
+  }
+  .theme-toggle__sun, .theme-toggle__moon { display: grid; place-items: center; flex: none; }
+  .theme-toggle[aria-pressed='false'] .theme-toggle__moon,
+  .theme-toggle[aria-pressed='true'] .theme-toggle__sun { display: none; }
+  .theme-toggle--icon {
+    width: auto;
+    margin: 0;
+    padding: 7px 9px;
+  }
+  .theme-toggle--icon .theme-toggle__copy { display: none; }
+
   .sidebar__meta {
-    margin: auto 0 0;
+    margin: 12px 0 0;
     padding: 14px 8px 0;
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 0.78rem;
@@ -209,6 +312,7 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
     justify-content: space-between;
   }
   .brand--compact { padding: 0; font-weight: 750; }
+  .topbar__actions { display: flex; align-items: center; gap: 8px; }
   .nav-toggle {
     font: 600 0.9rem var(--sans);
     color: var(--sidebar-ink);
