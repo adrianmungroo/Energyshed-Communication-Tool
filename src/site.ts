@@ -17,7 +17,6 @@ export const chapters: Chapter[] = [
   { slug: 'efficiency/', title: 'Energy efficiency', short: 'Efficiency' },
   { slug: 'local-generation/', title: 'Local generation and storage', short: 'Local generation' },
   { slug: 'grid/', title: 'The grid under pressure', short: 'Grid' },
-  { slug: 'future/', title: 'Looking to the future', short: 'Future' },
 ];
 
 export const dashboard = { slug: 'dashboard/', title: 'Compare scenarios' };

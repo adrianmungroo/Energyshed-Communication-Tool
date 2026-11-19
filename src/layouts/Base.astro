@@ -80,6 +80,15 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
         <p class="sidebar__group" id="nav-explore">Explore</p>
         <ul class="sidebar__list" aria-labelledby="nav-explore">
           <li>
+            <a href={url('future/')} aria-current={active === 'future/' ? 'page' : undefined}>
+              <span class="sidebar__dot" style="background: var(--fuel-solar)"></span>
+              <span class="sidebar__link-text">
+                Looking to the future
+                <span class="sidebar__sub">Unfinished section</span>
+              </span>
+            </a>
+          </li>
+          <li>
             <a href={url(dashboard.slug)} aria-current={active === dashboard.slug ? 'page' : undefined}>
               <span class="sidebar__dot" style="background: var(--fuel-nuclear)"></span>
               {dashboard.title}
@@ -244,6 +253,14 @@ const fullTitle = title === 'Atlanta Energyshed' ? title : `${title} | Atlanta E
   }
   .sidebar__dot { flex: none; width: 8px; height: 8px; border-radius: 999px; margin-inline: 6px; }
   .sidebar__dot--hollow { border: 1.5px solid var(--sidebar-muted); }
+  .sidebar__link-text { display: grid; gap: 1px; min-width: 0; }
+  .sidebar__sub {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: var(--sidebar-muted);
+    line-height: 1.25;
+  }
 
   .sidebar__foot { margin-top: auto; }
   .theme-toggle {

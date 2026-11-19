@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Figure from '../components/Figure.astro';
 import PageHead from '../components/PageHead.astro';
-import NextChapter from '../components/NextChapter.astro';
 import { dashboard, url } from '../site';
 
 // These GIFs/PNGs are still hosted on Imgur. Move them into public/images
@@ -19,7 +18,7 @@ const remote = {
 ---
 
 <Base title="Looking to the future" active="future/">
-  <PageHead slug="future/">
+  <PageHead slug="future/" title="Looking to the future">
     The grid edge model now covers all 11 counties of the Atlanta region. Here's an early look at what it can show.
   </PageHead>
 
@@ -114,8 +113,6 @@ const remote = {
     </div>
     <p><a class="button" href={url(dashboard.slug)}>Compare scenarios on the dashboard</a></p>
   </section>
-
-  <NextChapter slug="future/" />
 </Base>
 
 <script>
@@ -143,6 +140,7 @@ const remote = {
 </script>
 
 <style>
+  .page-head + .note { margin-top: 0; margin-bottom: 20px; }
   .flush { margin-top: 0; }
   .muted { color: var(--ink-soft); }
   .stack { display: grid; gap: 20px; }
